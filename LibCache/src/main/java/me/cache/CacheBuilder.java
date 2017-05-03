@@ -3,8 +3,8 @@ package me.cache;
 import android.os.Environment;
 
 import me.cache.impl.DiskCache;
-import me.cache.impl.Level2Cache;
-import me.cache.impl.Level2CacheStrategy;
+import me.cache.impl.LevelCache;
+import me.cache.impl.LevelCacheStrategy;
 import me.cache.impl.MemCache;
 import me.cache.intf.ICache;
 
@@ -19,7 +19,7 @@ public class CacheBuilder<K, V> {
     }
 
     private CacheType type;
-    private int memMaxSize = -1;//-1表示没有限制
+    private int memMaxSize = 1024 * 1024; // 默认1MB;
 
     private int diskMaxSize = -1;//-1表示没有限制
     private long diskExpiredPeriod = -1;//-1表示永久保存
@@ -97,27 +97,26 @@ public class CacheBuilder<K, V> {
     }
 
     private MemCache<K, V> createMemCache() {
-        return new MemCache<K, V>(memMaxSize);
+        return new MemCache<>(memMaxSize);
     }
 
     private DiskCache<K, V> createFileCache() {
-        return new DiskCache<K, V>(diskPath);
+        return new DiskCache<>(diskPath);
     }
 
-    private Level2Cache<K, V> createLevelCache() {
+    private LevelCache<K, V> createLevelCache() {
         if (null == diskPath) {
             throw new IllegalStateException();
         }
-        Level2Cache<K, V> cache = new Level2Cache<>();
+        LevelCache<K, V> cache = new LevelCache<>();
         cache.setCache(new MemCache<K, V>(memMaxSize), 1);
 
         DiskCache<K, V> diskCache = new DiskCache<>(diskPath);
         diskCache.setExpireTime(diskExpiredPeriod);
         diskCache.setMaxSpace(diskMaxSize);
         cache.setCache(diskCache, 2);
-        cache.setCacheStrategy(new Level2CacheStrategy<K, V>());
+        cache.setCacheStrategy(new LevelCacheStrategy<K, V>());
 
         return cache;
     }
-
 }

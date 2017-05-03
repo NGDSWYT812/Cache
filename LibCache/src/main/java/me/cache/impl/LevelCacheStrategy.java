@@ -7,9 +7,9 @@ import me.cache.intf.ILevelCacheST;
 
 /**
  * Created by wangyt on 2017/1/18.
- * : 二级缓存控制
+ * : 缓存控制
  */
-public class Level2CacheStrategy<K, V> implements ILevelCacheST<K, V> {
+public class LevelCacheStrategy<K, V> implements ILevelCacheST<K, V> {
     private static final int TAG_FIRST_CACHE = 0;
     private static final int TAG_SECOND_CACHE = 1;
 
@@ -57,5 +57,4 @@ public class Level2CacheStrategy<K, V> implements ILevelCacheST<K, V> {
             iCache.clear();
         }
     }
-
 }

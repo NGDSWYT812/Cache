@@ -8,9 +8,9 @@ import me.cache.intf.ILevelCacheST;
 
 /**
  * Created by wangyt on 2017/1/18.
- * : 二级缓存
+ * : 多级缓存
  */
-public class Level2Cache<K, V> implements ICache<K, V> {
+public class LevelCache<K, V> implements ICache<K, V> {
     private List<ICache<K, V>> caches = new ArrayList<>(2);
     private ILevelCacheST<K, V> cacheStrategy;
 
